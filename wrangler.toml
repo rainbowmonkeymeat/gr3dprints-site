@@ -1,4 +1,4 @@
 name = "gr3dprints-site"
 compatibility_date = "2026-10-22"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "."
+pages_build_output_dir = "./"

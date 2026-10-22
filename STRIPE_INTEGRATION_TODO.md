@@ -52,7 +52,7 @@ These parameters were configured in Checkout Studio and are already set in the s
 
 `payment_method_collection` was configured as `always` in Checkout Studio. It is omitted because Stripe only accepts that parameter when `mode` is `subscription`. This shop uses `payment`.
 
-`ui_mode` is `hosted_page` because the installed Stripe SDK is 23.0.1. SDK versions below 21.0.0 would need `hosted` instead. Do not downgrade the `stripe` package below 21 without changing that value.
+`ui_mode` is `hosted_page`, which is the current Stripe API value for a full-page Checkout. The function calls the Stripe API directly, so Pages can publish it without installing the Stripe package.
 
 ## Setup and next steps
 
@@ -74,8 +74,8 @@ Do this in the Stripe Dashboard while the account is still in test mode.
 
 Stay on the current Pages project. Do not create a separate Worker unless you want to leave Pages.
 
-1. Deploy this commit, including the `functions/` folder and `package.json`. Pages installs `stripe` and publishes `functions/api/create-checkout-session.js` as `https://gr3dprints.com/api/create-checkout-session`.
-2. Build settings: leave the build command empty, and set the build output directory to the project root (`/`). The site is still the HTML files at the root. If Pages fills in `npm run build` because it sees `package.json`, clear that command. There is no build script.
+1. Deploy this commit, including the `functions/` folder. Pages publishes `functions/api/create-checkout-session.js` as `https://gr3dprints.com/api/create-checkout-session`. The function does not import any packages, so the build does not need `npm install`.
+2. Build settings: leave the build command empty, and set the build output directory to the project root (`/`). The site is still the HTML files at the root.
 3. Settings → Environment variables. Add these for Production and Preview. The names must match the code exactly.
   - `STRIPE_SECRET_KEY` = the `sk_test_...` key
   - `DOMAIN` = `https://gr3dprints.com` (no trailing slash)
