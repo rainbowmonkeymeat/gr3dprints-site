@@ -1,3 +1,27 @@
+# Dependencies
 node_modules/
+
+# Environment files. .env.example is the only one that belongs in git.
 .env
+.env.*
+!.env.example
 .dev.vars
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Caches and local build output
+.npm/
+.eslintcache
+.cache/
+dist/
+coverage/
+*.tsbuildinfo
+
+# Cloudflare local state
+.wrangler/
