@@ -1,0 +1,7 @@
+{
+  "name": "gr3dprints-site",
+  "private": true,
+  "dependencies": {
+    "stripe": "^23.0.1"
+  }
+}

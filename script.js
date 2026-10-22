@@ -76,7 +76,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
-    const animateElements = document.querySelectorAll('.portfolio-item, .about-content, .contact-content, .product-card');
+    const animateElements = document.querySelectorAll('.portfolio-item, .about-content, .contact-content');
     animateElements.forEach(el => {
         el.classList.add('fade-in');
         observer.observe(el);
@@ -228,70 +228,293 @@ function formatPrice(price) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
 }
 
-function checkoutLink(url) {
-    if (typeof url !== 'string' || !url.trim()) {
-        return '';
-    }
-    try {
-        const parsed = new URL(url.trim(), window.location.href);
-        if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
-            return parsed.href;
-        }
-    } catch (error) {
-        return '';
-    }
-    return '';
+const CART_KEY = 'gr3d-cart';
+
+function productList() {
+    return typeof PRODUCTS === 'undefined' ? [] : PRODUCTS;
+}
+
+function findProduct(id) {
+    return productList().find(product => product.id === id);
 }
 
 function renderProductCard(product) {
     const price = formatPrice(product.price);
     const soldOut = product.available === false;
-    const checkoutUrl = soldOut ? '' : checkoutLink(product.checkoutUrl);
-    let action = '';
-
-    if (soldOut) {
-        action = '<span class="btn btn-solid is-disabled">Sold out</span>';
-    } else if (checkoutUrl) {
-        action = `<a class="btn btn-solid" href="${escapeHtml(checkoutUrl)}" target="_blank" rel="noopener noreferrer">Buy</a>`;
-    }
+    const action = soldOut
+        ? '<span class="btn btn-solid is-disabled">Sold out</span>'
+        : `<button type="button" class="btn btn-solid add-to-cart" data-product-id="${escapeHtml(product.id)}">Add to cart</button>`;
 
     return `
         <article class="product-card${soldOut ? ' is-sold-out' : ''}">
-            <div class="product-image">
-                <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="product-img">
-                ${soldOut ? '<span class="product-badge">Sold out</span>' : ''}
-            </div>
-            <div class="product-body">
-                <h3>${escapeHtml(product.name)}</h3>
-                ${price ? `<p class="product-price">${escapeHtml(price)}</p>` : ''}
-                <p class="product-description">${escapeHtml(product.description)}</p>
+            <a class="product-link" href="shop.html#${encodeURIComponent(product.id)}">
+                <div class="product-image">
+                    <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="product-img">
+                    ${soldOut ? '<span class="product-badge">Sold out</span>' : ''}
+                </div>
+                <div class="product-body">
+                    <h3>${escapeHtml(product.name)}</h3>
+                    ${price ? `<p class="product-price">${escapeHtml(price)}</p>` : ''}
+                    <p class="product-description">${escapeHtml(product.description)}</p>
+                </div>
+            </a>
+            <div class="product-actions">
                 ${action}
             </div>
         </article>
     `;
 }
 
-function renderStore() {
-    if (typeof PRODUCTS === 'undefined') {
-        return;
-    }
+function renderProductDetail(product) {
+    const price = formatPrice(product.price);
+    const soldOut = product.available === false;
+    const action = soldOut
+        ? '<span class="btn btn-solid is-disabled">Sold out</span>'
+        : `<button type="button" class="btn btn-solid add-to-cart" data-product-id="${escapeHtml(product.id)}">Add to cart</button>`;
 
+    return `
+        <a class="product-back" href="shop.html">All prints</a>
+        <div class="product-detail-image">
+            <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}">
+        </div>
+        <div class="product-detail-info">
+            <h2>${escapeHtml(product.name)}</h2>
+            ${price ? `<p class="product-price">${escapeHtml(price)}</p>` : ''}
+            <p>${escapeHtml(product.description)}</p>
+            ${action}
+        </div>
+    `;
+}
+
+function renderShop() {
     const featured = document.getElementById('featured-products');
-    if (featured) {
-        const items = PRODUCTS.filter(product => product.featured);
-        featured.innerHTML = items.map(renderProductCard).join('');
-        const section = document.getElementById('shop');
-        if (section && items.length === 0) {
-            section.hidden = true;
+    if (featured && productList().length) {
+        const items = productList().filter(product => product.featured);
+        if (items.length) {
+            featured.innerHTML = items.map(renderProductCard).join('');
         }
     }
 
-    const catalog = document.getElementById('store-catalog');
-    if (catalog) {
-        catalog.innerHTML = PRODUCTS.length
-            ? PRODUCTS.map(renderProductCard).join('')
-            : '<p class="store-empty">No products are listed yet.</p>';
+    const catalog = document.getElementById('shop-catalog');
+    if (catalog && productList().length) {
+        catalog.innerHTML = productList().map(renderProductCard).join('');
+    }
+
+    showProductFromHash();
+}
+
+function showProductFromHash() {
+    const catalog = document.getElementById('shop-catalog');
+    const detail = document.getElementById('product-detail');
+    if (!catalog || !detail) {
+        return;
+    }
+
+    const id = decodeURIComponent(location.hash.replace(/^#/, ''));
+    const product = findProduct(id);
+    if (!product) {
+        detail.hidden = true;
+        detail.innerHTML = '';
+        catalog.hidden = false;
+        return;
+    }
+
+    detail.innerHTML = renderProductDetail(product);
+    detail.hidden = false;
+    catalog.hidden = true;
+}
+
+function readCart() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+        if (!Array.isArray(parsed)) {
+            return [];
+        }
+        return parsed.filter(item => item && item.id && item.qty > 0);
+    } catch (error) {
+        return [];
     }
 }
 
-renderStore(); 
+function writeCart(items) {
+    localStorage.setItem(CART_KEY, JSON.stringify(items));
+    renderCart();
+}
+
+function addToCart(id) {
+    const product = findProduct(id);
+    if (!product || product.available === false) {
+        return;
+    }
+    const cart = readCart();
+    const existing = cart.find(item => item.id === id);
+    if (existing) {
+        existing.qty += 1;
+    } else {
+        cart.push({ id, qty: 1 });
+    }
+    writeCart(cart);
+    openCart();
+}
+
+function changeQty(id, delta) {
+    const cart = readCart()
+        .map(item => item.id === id ? { ...item, qty: item.qty + delta } : item)
+        .filter(item => item.qty > 0);
+    writeCart(cart);
+}
+
+function removeFromCart(id) {
+    writeCart(readCart().filter(item => item.id !== id));
+}
+
+function renderCart() {
+    const items = readCart();
+    const count = items.reduce((sum, item) => sum + item.qty, 0);
+    document.querySelectorAll('.cart-count').forEach(badge => {
+        badge.textContent = String(count);
+        badge.classList.toggle('is-empty', count === 0);
+    });
+
+    const list = document.querySelector('.cart-items');
+    const totalEl = document.querySelector('.cart-total');
+    if (!list || !totalEl) {
+        return;
+    }
+
+    const checkoutForm = document.querySelector('.cart-checkout');
+    if (checkoutForm) {
+        checkoutForm.hidden = items.length === 0;
+    }
+
+    if (!items.length) {
+        list.innerHTML = '<p class="cart-empty">Your cart is empty.</p>';
+        totalEl.textContent = '';
+        return;
+    }
+
+    let total = 0;
+    let everyItemHasPrice = true;
+    list.innerHTML = items.map(item => {
+        const product = findProduct(item.id);
+        const name = product ? product.name : 'Unavailable print';
+        const image = product ? product.image : '';
+        const price = product ? formatPrice(product.price) : '';
+        if (product && typeof product.price === 'number') {
+            total += product.price * item.qty;
+        } else {
+            everyItemHasPrice = false;
+        }
+        return `
+            <div class="cart-row">
+                ${image ? `<img src="${escapeHtml(image)}" alt="" class="cart-thumb">` : ''}
+                <div class="cart-row-info">
+                    <h3>${escapeHtml(name)}</h3>
+                    ${price ? `<p class="product-price">${escapeHtml(price)}</p>` : ''}
+                    <div class="cart-qty">
+                        <button type="button" data-cart-action="decrease" data-product-id="${escapeHtml(item.id)}" aria-label="Decrease quantity">−</button>
+                        <span>${item.qty}</span>
+                        <button type="button" data-cart-action="increase" data-product-id="${escapeHtml(item.id)}" aria-label="Increase quantity">+</button>
+                    </div>
+                </div>
+                <button type="button" class="cart-remove" data-cart-action="remove" data-product-id="${escapeHtml(item.id)}" aria-label="Remove ${escapeHtml(name)}">×</button>
+            </div>
+        `;
+    }).join('');
+
+    totalEl.textContent = everyItemHasPrice ? `Total ${formatPrice(total)}` : '';
+}
+
+function mountCart() {
+    if (!document.getElementById('cart-drawer')) {
+        document.body.insertAdjacentHTML('beforeend', `
+            <div id="cart-drawer" class="cart-drawer" hidden>
+                <button type="button" class="cart-backdrop" aria-label="Close cart"></button>
+                <aside class="cart-panel" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+                    <div class="cart-header">
+                        <h2 id="cart-title">Cart</h2>
+                        <button type="button" class="cart-close" aria-label="Close cart">×</button>
+                    </div>
+                    <div class="cart-items"></div>
+                    <p class="cart-total"></p>
+                    <form class="cart-checkout" method="POST" action="/api/create-checkout-session" hidden>
+                        <button type="submit" class="btn btn-solid">Checkout</button>
+                    </form>
+                </aside>
+            </div>
+        `);
+        document.querySelector('.cart-close').addEventListener('click', closeCart);
+        document.querySelector('.cart-backdrop').addEventListener('click', closeCart);
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape') {
+                closeCart();
+            }
+        });
+    }
+
+    document.querySelectorAll('.cart-toggle').forEach(button => {
+        if (button.dataset.bound === 'true') {
+            return;
+        }
+        button.dataset.bound = 'true';
+        button.addEventListener('click', openCart);
+    });
+    renderCart();
+}
+
+function openCart() {
+    const drawer = document.getElementById('cart-drawer');
+    if (!drawer) {
+        return;
+    }
+    drawer.hidden = false;
+    document.body.classList.add('cart-open');
+    const closeButton = drawer.querySelector('.cart-close');
+    if (closeButton) {
+        closeButton.focus();
+    }
+}
+
+function closeCart() {
+    const drawer = document.getElementById('cart-drawer');
+    if (!drawer || drawer.hidden) {
+        return;
+    }
+    drawer.hidden = true;
+    document.body.classList.remove('cart-open');
+}
+
+document.addEventListener('click', event => {
+    const addButton = event.target.closest('.add-to-cart');
+    if (addButton) {
+        addToCart(addButton.dataset.productId);
+        return;
+    }
+
+    const actionButton = event.target.closest('[data-cart-action]');
+    if (!actionButton) {
+        return;
+    }
+    const id = actionButton.dataset.productId;
+    const action = actionButton.dataset.cartAction;
+    if (action === 'increase') {
+        changeQty(id, 1);
+    } else if (action === 'decrease') {
+        changeQty(id, -1);
+    } else if (action === 'remove') {
+        removeFromCart(id);
+    }
+});
+
+window.addEventListener('hashchange', showProductFromHash);
+
+function startShop() {
+    renderShop();
+    mountCart();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startShop);
+} else {
+    startShop();
+} 
