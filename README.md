@@ -60,12 +60,10 @@ After install, `.assetsignore` keeps `node_modules` from being published as part
 5. Build output directory: `/`.
 6. Root directory: the repository root. Leave it blank.
 7. Save and deploy.
-8. **Settings → Environment variables**, for both Production and Preview:
-   - `STRIPE_SECRET_KEY` = a Stripe restricted key (`rk_test_...` until a live payment is ready)
-   - `DOMAIN` = `https://gr3dprints.com` with no trailing slash
+8. **Settings → Environment variables**, for both Production and Preview: `STRIPE_SECRET_KEY` = a Stripe restricted key (`rk_test_...` until a live payment is ready). `DOMAIN` is already `https://gr3dprints.com` in [wrangler.toml](wrangler.toml). Do not put the secret key in that file.
 9. Compatibility date and `nodejs_compat` come from [wrangler.toml](wrangler.toml). On a project that is not using that file, set the same values under **Settings → Functions**: compatibility date `2026-10-22` or later, and the `nodejs_compat` flag.
 10. Attach the custom domain `gr3dprints.com`.
 
 Direct Upload does not install npm packages for Functions. Use the Git connection, or run `npm ci` and then `npx wrangler pages deploy .` after `npx wrangler login`.
 
-Stripe Tax, the terms URL, and Price IDs are set in the Stripe Dashboard. Those steps are in [STRIPE_INTEGRATION_TODO.md](STRIPE_INTEGRATION_TODO.md).
+Stripe Tax and the terms URL are set in the Stripe Dashboard. Prices are in [functions/catalog.js](functions/catalog.js). Remaining steps are in [STRIPE_INTEGRATION_TODO.md](STRIPE_INTEGRATION_TODO.md).
