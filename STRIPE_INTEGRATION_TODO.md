@@ -52,7 +52,7 @@ These parameters were configured in Checkout Studio and are already set in the s
 
 `payment_method_collection` was configured as `always` in Checkout Studio. It is omitted because Stripe only accepts that parameter when `mode` is `subscription`. This shop uses `payment`.
 
-`ui_mode` is `hosted_page`, which is the current Stripe API value for a full-page Checkout. The function calls the Stripe API directly, so Pages can publish it without installing the Stripe package.
+`ui_mode` is `hosted_page`, which is the current Stripe API value for a full-page Checkout. The function uses the Stripe Node SDK (`stripe` 23.0.1), which sends API version `2026-09-30.endive`. Pages must install that package before it bundles the function.
 
 ## Setup and next steps
 
@@ -62,9 +62,9 @@ These parameters were configured in Checkout Studio and are already set in the s
 
 Do this in the Stripe Dashboard while the account is still in test mode.
 
-1. Open [API keys](https://dashboard.stripe.com/test/apikeys). Copy the secret key (`sk_test_...`). Do not put it in the website files or in chat.
+1. Open [API keys](https://dashboard.stripe.com/test/apikeys) and create a restricted key (`rk_test_...`) that can write Checkout Sessions. A restricted key is safer than the account’s full secret key. The Pages variable is still named `STRIPE_SECRET_KEY`. Do not put the key in the website files or in chat.
 2. Turn on [Stripe Tax](https://dashboard.stripe.com/test/settings/tax). `automatic_tax` is enabled, and Checkout returns an error until Tax is activated and the head office address is saved.
-3. In Checkout settings, set the terms of service URL to `https://gr3dprints.com/terms.html`. `consent_collection.terms_of_service` is `required`, so Stripe will not show Checkout until that URL is saved. Publish the terms page before relying on this.
+3. In Checkout settings, set the terms of service URL to `https://gr3dprints.com/terms.html`. `consent_collection.terms_of_service` is `required`, so Stripe will not show Checkout until that URL is saved. The page has a draft of the shop’s terms. Read it and change anything that does not match how you actually sell, then publish that version before relying on the checkbox.
 4. Create a Price for each print you sell: [Product catalog](https://dashboard.stripe.com/test/products) → Add product → one-time price. Copy each `price_...` ID.
 5. Replace `price_...` in [functions/api/create-checkout-session.js](functions/api/create-checkout-session.js). For more than one print, build `line_items` from the cart (`{ id, qty }` in the browser) by mapping each shop product to its Price ID on the server. Do not trust prices sent from the browser.
 
@@ -72,15 +72,15 @@ Do this in the Stripe Dashboard while the account is still in test mode.
 
 ### 2. Cloudflare Pages
 
-Stay on the current Pages project. Do not create a separate Worker unless you want to leave Pages.
+Stay on the current Pages project. The reason is in [AGENTS.md](AGENTS.md). The dashboard clicks for a new or existing Pages project are in [README.md](README.md).
 
-1. Deploy this commit, including the `functions/` folder. Pages publishes `functions/api/create-checkout-session.js` as `https://gr3dprints.com/api/create-checkout-session`. The function does not import any packages, so the build does not need `npm install`.
-2. Build settings: leave the build command empty, and set the build output directory to the project root (`/`). The site is still the HTML files at the root.
+1. Settings → Builds & deployments → Build configuration. Set the build command to `npm ci`. Set the build output directory to the project root (`/`). Pages installs `package.json` only when a build command is set. An empty command skips the install, and the function build fails with `Could not resolve "stripe"`.
+2. Deploy this commit, including the `functions/` folder and `package-lock.json`. Pages publishes `functions/api/create-checkout-session.js` as `https://gr3dprints.com/api/create-checkout-session`. `.assetsignore` keeps `node_modules` off the public site after the install.
 3. Settings → Environment variables. Add these for Production and Preview. The names must match the code exactly.
-  - `STRIPE_SECRET_KEY` = the `sk_test_...` key
+  - `STRIPE_SECRET_KEY` = the `rk_test_...` key
   - `DOMAIN` = `https://gr3dprints.com` (no trailing slash)
-4. Settings → Functions → Compatibility flags. Add `nodejs_compat`. The same flag is in [wrangler.toml](wrangler.toml). Set the compatibility date to `2026-10-22` or later.
-5. Direct Upload of the folder does not install npm packages for Functions. Use the Git connection, or run `npx wrangler pages deploy .` from this folder after `npx wrangler login`.
+4. Settings → Functions → Compatibility flags. Add `nodejs_compat`. The same flag is in [wrangler.toml](wrangler.toml). Set the compatibility date to `2026-10-22` or later. The SDK needs this flag because it runs on the Workers runtime.
+5. Direct Upload of the folder does not install npm packages for Functions. Use the Git connection, or run `npm ci` and then `npx wrangler pages deploy .` from this folder after `npx wrangler login`.
 
 Local check, optional:
 
@@ -113,8 +113,8 @@ Switch `STRIPE_SECRET_KEY` to the live secret key (`sk_live_...`) only after a t
 
 - Replace the placeholder Price ID, then pass the real cart instead of a single sample line.
 - Add a success page and point `success_url` at it.
-- Fulfill the order (print and pickup or shipping). The function does not record orders. A webhook can do that later. It is not set up.
-- Fill in [privacy.html](privacy.html) and [terms.html](terms.html) before accepting live payments.
+- Fulfill the order from a webhook, not from the success page. Handle `checkout.session.completed` and `checkout.session.async_payment_succeeded`, and print or ship only when `payment_status` is not `unpaid`. Verify the Stripe signature. This handler is required before launch. It is not set up.
+- Read the draft in [terms.html](terms.html) and fill in [privacy.html](privacy.html) before accepting live payments.
 
 
 

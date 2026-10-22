@@ -2,3 +2,6 @@ name = "gr3dprints-site"
 compatibility_date = "2026-10-22"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "./"
+# The Pages build command is not stored in this file. Set it to `npm ci`
+# in the Cloudflare dashboard so the Stripe package is installed before
+# Functions are bundled. An empty command skips that install.

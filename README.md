@@ -1,196 +1,71 @@
-# GR3D Prints - 3D Printing Business Website
+# GR3D Prints
 
-A modern, responsive website for a 3D printing business serving the Greater Grand Rapids area in Michigan.
+Static site for the GR3D Prints shop (Rainbow Monkey Meat LLC, Wayland, Michigan). It is hosted on Cloudflare Pages at [gr3dprints.com](https://gr3dprints.com).
 
-## 🌟 Features
+The shop, cart, terms, and privacy pages are plain HTML, CSS, and JavaScript. Checkout is a Pages Function that creates a Stripe Checkout Session with the Stripe Node SDK. Stay on Pages. The reason, and when a move to Workers would be worth it, is in [AGENTS.md](AGENTS.md).
 
-- **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
-- **Modern UI/UX**: Clean, professional design with smooth animations
-- **Local Business Focus**: Tailored for the Greater Grand Rapids area
-- **Contact Form**: Interactive quote request form with validation
-- **Service Showcase**: Comprehensive display of 3D printing services
-- **Portfolio Section**: Gallery to showcase your work
-- **Mobile Navigation**: Hamburger menu for mobile devices
-- **Smooth Scrolling**: Enhanced user experience with smooth page navigation
-
-## 📁 File Structure
+## Project files
 
 ```
-gr3dprints/
-├── index.html          # Main homepage
-├── styles.css          # CSS styling
-├── script.js           # JavaScript functionality
-└── README.md           # This file
+index.html              Homepage
+shop.html               Catalog and product pages
+store.html              Redirect to shop.html
+terms.html              Terms of service
+privacy.html            Privacy policy
+products.js             Catalog data
+script.js               Cart and page behavior
+styles.css
+photos/
+functions/api/create-checkout-session.js
+wrangler.toml           Pages compatibility and output directory
+package.json            Stripe SDK
+package-lock.json
+.assetsignore           Keeps node_modules off the public site
+.env.example            Variable names only. No real keys.
 ```
 
-## 🚀 Getting Started
+## Local preview
 
-### Prerequisites
-- A modern web browser (Chrome, Firefox, Safari, Edge)
-- A web server (optional, for production)
-
-### Installation
-
-1. **Download/Clone** the project files to your local machine
-2. **Open** `index.html` in your web browser
-3. **Customize** the content to match your business needs
-
-### Local Development Server (Optional)
-
-If you want to run a local server for development:
+From this folder:
 
 ```bash
-# Using Python 3
 python -m http.server 8000
-
-# Using Node.js (if you have http-server installed)
-npx http-server
-
-# Using PHP
-php -S localhost:8000
 ```
 
-Then visit `http://localhost:8000` in your browser.
+Open `http://localhost:8000`. This serves the pages only. Checkout needs the Pages Function and a Stripe key. For that, copy `.env.example` to `.dev.vars`, paste a test key, and run `npx wrangler pages dev .`. Remaining Stripe steps are in [STRIPE_INTEGRATION_TODO.md](STRIPE_INTEGRATION_TODO.md).
 
-## 🎨 Customization
+## Cloudflare Pages
 
-### Content Updates
+Production deploys from the `main` branch. The build command is a dashboard setting. `wrangler.toml` does not contain it, and a `[build]` block in that file is for Workers, not Pages.
 
-1. **Business Information**: Update contact details, phone numbers, and email addresses
-2. **Services**: Modify the services section to match your offerings
-3. **About Section**: Add your business story and local expertise
-4. **Portfolio**: Replace placeholder images with actual photos of your work
-5. **Contact Form**: Configure form submission to your preferred method
+### Existing project
 
-### Styling Changes
+1. Open the Cloudflare dashboard and select the **gr3dprints-site** Pages project.
+2. Go to **Settings → Builds & deployments → Build configuration**.
+3. Set **Build command** to `npm ci`.
+4. Save, then retry the deployment (**Deployments → Retry deployment**, or push a commit to `main`).
 
-- **Colors**: Modify the CSS variables in `styles.css` to match your brand
-- **Fonts**: Change the Google Fonts import in `index.html`
-- **Layout**: Adjust grid layouts and spacing in the CSS
+Leave the build output directory as the project root (`/`). If that field is locked, leave it. [wrangler.toml](wrangler.toml) sets `pages_build_output_dir = "./"`, which is the same directory, and that file is the source of truth for it.
 
-### Key Areas to Customize
+`npm ci` is required. Pages installs dependencies only when a build command is set. The checkout function imports `stripe`. With an empty command, the log says `No build command specified. Skipping build step.` and then `Could not resolve "stripe"`. The whole deploy fails, including HTML pages.
 
-#### Contact Information
-Update these sections in `index.html`:
-- Phone number: `(616) XXX-XXXX`
-- Email: `info@gr3dprints.com`
-- Business hours
-- Location details
+After install, `.assetsignore` keeps `node_modules` from being published as part of the site.
 
-#### Services
-Modify the services in the services section to match your actual offerings:
-- Rapid Prototyping
-- Production Parts
-- Custom Designs
-- Repair Parts
-- Educational Models
-- Design Consultation
+### New project
 
-#### Portfolio
-Replace the placeholder portfolio items with actual photos of your 3D printed work.
+1. In Cloudflare, create a Pages project and connect the GitHub repository `rainbowmonkeymeat/gr3dprints-site`.
+2. Production branch: `main`.
+3. Framework preset: **None**.
+4. Build command: `npm ci`.
+5. Build output directory: `/`.
+6. Root directory: the repository root. Leave it blank.
+7. Save and deploy.
+8. **Settings → Environment variables**, for both Production and Preview:
+   - `STRIPE_SECRET_KEY` = a Stripe restricted key (`rk_test_...` until a live payment is ready)
+   - `DOMAIN` = `https://gr3dprints.com` with no trailing slash
+9. Compatibility date and `nodejs_compat` come from [wrangler.toml](wrangler.toml). On a project that is not using that file, set the same values under **Settings → Functions**: compatibility date `2026-10-22` or later, and the `nodejs_compat` flag.
+10. Attach the custom domain `gr3dprints.com`.
 
-## 📱 Responsive Design
+Direct Upload does not install npm packages for Functions. Use the Git connection, or run `npm ci` and then `npx wrangler pages deploy .` after `npx wrangler login`.
 
-The website is fully responsive and includes:
-- Mobile-first design approach
-- Hamburger navigation for mobile devices
-- Flexible grid layouts
-- Optimized typography for all screen sizes
-- Touch-friendly buttons and forms
-
-## 🔧 Technical Features
-
-### CSS Features
-- CSS Grid and Flexbox for layouts
-- CSS Custom Properties (variables)
-- Smooth transitions and animations
-- Mobile-first responsive design
-- Modern CSS features like backdrop-filter
-
-### JavaScript Features
-- Mobile navigation toggle
-- Smooth scrolling navigation
-- Form validation and submission
-- Intersection Observer for animations
-- Scroll-to-top functionality
-- Dynamic navbar styling
-
-### Performance Optimizations
-- Optimized images (placeholder icons for now)
-- Minimal JavaScript bundle
-- Efficient CSS selectors
-- Smooth animations with hardware acceleration
-
-## 📧 Contact Form
-
-The contact form includes:
-- Name, email, phone, and message fields
-- Service type selection
-- Client-side validation
-- Responsive design
-- Success/error handling
-
-**Note**: The form currently shows a success message. For production, you'll need to:
-1. Set up a backend service (PHP, Node.js, etc.)
-2. Configure email sending (SendGrid, Mailgun, etc.)
-3. Add CSRF protection
-4. Implement rate limiting
-
-## 🎯 SEO Optimization
-
-The website includes:
-- Semantic HTML structure
-- Meta descriptions and titles
-- Proper heading hierarchy
-- Alt text for images (when added)
-- Fast loading times
-- Mobile-friendly design
-
-## 🌐 Deployment
-
-### Static Hosting Options
-- **Netlify**: Drag and drop deployment
-- **Vercel**: Git-based deployment
-- **GitHub Pages**: Free hosting for public repositories
-- **Firebase Hosting**: Google's hosting solution
-
-### Domain Setup
-1. Purchase a domain (e.g., `gr3dprints.com`)
-2. Configure DNS settings
-3. Set up SSL certificate (usually automatic with modern hosts)
-
-## 📋 To-Do List for Production
-
-- [ ] Add real photos of your 3D printed work
-- [ ] Set up contact form backend
-- [ ] Configure email service
-- [ ] Add Google Analytics
-- [ ] Set up Google My Business listing
-- [ ] Add social media links
-- [ ] Create privacy policy and terms of service
-- [ ] Add SSL certificate
-- [ ] Optimize images for web
-- [ ] Add loading states for forms
-
-## 🛠️ Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## 📞 Support
-
-For questions or customization help:
-- Review the code comments for guidance
-- Check browser developer tools for debugging
-- Test on multiple devices and browsers
-
-## 📄 License
-
-This project is created for your 3D printing business. Feel free to modify and use as needed.
-
----
-
-**Built with ❤️ for the Greater Grand Rapids 3D printing community** 
+Stripe Tax, the terms URL, and Price IDs are set in the Stripe Dashboard. Those steps are in [STRIPE_INTEGRATION_TODO.md](STRIPE_INTEGRATION_TODO.md).
