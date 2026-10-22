@@ -76,18 +76,10 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for animation
 document.addEventListener('DOMContentLoaded', () => {
-    const animateElements = document.querySelectorAll('.service-card, .portfolio-item, .about-content, .contact-content');
+    const animateElements = document.querySelectorAll('.portfolio-item, .about-content, .contact-content, .product-card');
     animateElements.forEach(el => {
         el.classList.add('fade-in');
         observer.observe(el);
-    });
-});
-
-// Add loading animation for service cards
-document.addEventListener('DOMContentLoaded', () => {
-    const serviceCards = document.querySelectorAll('.service-card');
-    serviceCards.forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.1}s`;
     });
 });
 
@@ -164,22 +156,6 @@ style.textContent = `
         border-color: #ef4444;
         box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
     }
-    
-    .service-card {
-        animation: fadeInUp 0.6s ease forwards;
-        opacity: 0;
-    }
-    
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
 `;
 document.head.appendChild(style);
 
@@ -235,4 +211,87 @@ scrollToTopBtn.addEventListener('mouseenter', () => {
 scrollToTopBtn.addEventListener('mouseleave', () => {
     scrollToTopBtn.style.transform = 'translateY(0)';
     scrollToTopBtn.style.boxShadow = 'none';
-}); 
+});
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function formatPrice(price) {
+    if (typeof price !== 'number' || Number.isNaN(price)) {
+        return '';
+    }
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+}
+
+function checkoutLink(url) {
+    if (typeof url !== 'string' || !url.trim()) {
+        return '';
+    }
+    try {
+        const parsed = new URL(url.trim(), window.location.href);
+        if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
+            return parsed.href;
+        }
+    } catch (error) {
+        return '';
+    }
+    return '';
+}
+
+function renderProductCard(product) {
+    const price = formatPrice(product.price);
+    const soldOut = product.available === false;
+    const checkoutUrl = soldOut ? '' : checkoutLink(product.checkoutUrl);
+    let action = '';
+
+    if (soldOut) {
+        action = '<span class="btn btn-solid is-disabled">Sold out</span>';
+    } else if (checkoutUrl) {
+        action = `<a class="btn btn-solid" href="${escapeHtml(checkoutUrl)}" target="_blank" rel="noopener noreferrer">Buy</a>`;
+    }
+
+    return `
+        <article class="product-card${soldOut ? ' is-sold-out' : ''}">
+            <div class="product-image">
+                <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" class="product-img">
+                ${soldOut ? '<span class="product-badge">Sold out</span>' : ''}
+            </div>
+            <div class="product-body">
+                <h3>${escapeHtml(product.name)}</h3>
+                ${price ? `<p class="product-price">${escapeHtml(price)}</p>` : ''}
+                <p class="product-description">${escapeHtml(product.description)}</p>
+                ${action}
+            </div>
+        </article>
+    `;
+}
+
+function renderStore() {
+    if (typeof PRODUCTS === 'undefined') {
+        return;
+    }
+
+    const featured = document.getElementById('featured-products');
+    if (featured) {
+        const items = PRODUCTS.filter(product => product.featured);
+        featured.innerHTML = items.map(renderProductCard).join('');
+        const section = document.getElementById('shop');
+        if (section && items.length === 0) {
+            section.hidden = true;
+        }
+    }
+
+    const catalog = document.getElementById('store-catalog');
+    if (catalog) {
+        catalog.innerHTML = PRODUCTS.length
+            ? PRODUCTS.map(renderProductCard).join('')
+            : '<p class="store-empty">No products are listed yet.</p>';
+    }
+}
+
+renderStore(); 

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GR3D Prints - Professional 3D Printing Services in Grand Rapids</title>
-    <meta name="description" content="Professional 3D printing services in the Greater Grand Rapids area. Custom prints, prototyping, and manufacturing solutions for businesses and individuals.">
+    <title>GR3D Prints - 3D Prints in Grand Rapids</title>
+    <meta name="description" content="3D prints from a garage shop in Wayland, serving the greater Grand Rapids area.">
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -13,21 +13,24 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-logo">
+            <a href="index.html" class="nav-logo">
                 <h2>GR3D Prints</h2>
-            </div>
+            </a>
             <ul class="nav-menu">
                 <li class="nav-item">
                     <a href="#home" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#services" class="nav-link">Services</a>
+                    <a href="store.html" class="nav-link">Store</a>
                 </li>
                 <li class="nav-item">
                     <a href="#about" class="nav-link">About</a>
                 </li>
                 <li class="nav-item">
                     <a href="#portfolio" class="nav-link">Portfolio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#locations" class="nav-link">Find Us</a>
                 </li>
                 <li class="nav-item">
                     <a href="#contact" class="nav-link">Contact</a>
@@ -49,53 +52,47 @@
         </div>
         <div class="hero-container">
             <div class="hero-content">
-                <h1>3D Printing Services</h1>
+                <h1>3D Prints</h1>
                 <h2>Serving the Greater Grand Rapids Area</h2>
-                <p>Bringing your ideas to life with precision, quality, and local expertise.</p>
+                <p>Printing from my garage in Wayland, serving the greater Grand Rapids area.</p>
                 <div class="hero-buttons">
-                    <a href="#services" class="btn btn-primary">Our Services</a>
-                    <a href="#contact" class="btn btn-secondary">Get a Quote</a>
+                    <a href="store.html" class="btn btn-primary">Shop the Store</a>
+                    <a href="#portfolio" class="btn btn-secondary">Our Work</a>
+                    <a href="#contact" class="btn btn-secondary">Contact Us</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="services">
+    <!-- Shop preview -->
+    <section id="shop" class="store-section">
         <div class="container">
-            <h2 class="section-title">Our Services</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-image">
-                        <img src="photos/IMG_0400-EDIT.jpg" alt="Print Something You Saw" class="service-img">
-                    </div>
-                    <div class="service-icon">
-                        <i class="fas fa-cogs"></i>
-                    </div>
-                    <h3>Print Something You Saw</h3>
-                    <p>Saw something cool online or at a show? Let's print one for you in the colors of your choice.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-image">
-                        <img src="photos/services/side_view.png" alt="Create Something You Need" class="service-img">
-                    </div>
-                    <div class="service-icon">
-                        <i class="fas fa-palette"></i>
-                    </div>
-                    <h3>Create Something You Need</h3>
-                    <p>Have an idea for a custom design? Let's work together to make it a reality.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-image">
-                        <img src="photos/services/bracket.jpg" alt="Fix Something You Broke" class="service-img">
-                    </div>
-                    <div class="service-icon">
-                        <i class="fas fa-tools"></i>
-                    </div>
-                    <h3>Fix Something You Broke</h3>
-                    <p>Have a broken or missing part? Let us help you create a replacement.</p>
-                </div>
+            <h2 class="section-title">From the Shop</h2>
+            <p class="section-lead">Finished prints from our shows.</p>
+            <div id="featured-products" class="store-grid"></div>
+            <div class="store-more">
+                <a href="store.html" class="btn btn-solid">View the store</a>
             </div>
+        </div>
+    </section>
+
+    <!-- Where prints are stocked. Copy a location-card to add another shop. -->
+    <section id="locations" class="locations">
+        <div class="container">
+            <h2 class="section-title">Find Our Prints</h2>
+            <p class="section-lead">Finished prints are stocked locally. Stop in and see them in person.</p>
+            <ul class="location-list">
+                <li class="location-card">
+                    <div class="location-body">
+                        <h3>Stomping Grounds Play Cafe</h3>
+                        <p class="location-address">9028 North Rodgers Ct SE, Suite E<br>Caledonia, MI 49316</p>
+                    </div>
+                    <div class="location-actions">
+                        <a class="location-site" href="https://www.stompinggroundsgr.com/" target="_blank" rel="noopener noreferrer">stompinggroundsgr.com</a>
+                        <a class="btn btn-solid" href="https://www.google.com/maps/search/?api=1&amp;query=Stomping%20Grounds%20Play%20Cafe%209028%20North%20Rodgers%20Ct%20SE%20Suite%20E%20Caledonia%20MI%2049316" target="_blank" rel="noopener noreferrer">Directions</a>
+                    </div>
+                </li>
+            </ul>
         </div>
     </section>
 
@@ -105,17 +102,17 @@
             <div class="about-content">
                 <div class="about-text">
                     <h2>About GR3D Prints</h2>
-                    <p>Welcome to GR3D Prints! We're a small, family-run 3D printing business based in the greater Grand Rapids, Michigan area. It's just the two of us—me and my husband—working out of our garage with a couple of Bambu Lab X1C printers and a lot of creativity.</p>
-                    <p>We've been 3D printing since 2010 and love bringing unique ideas to life, whether it's custom creations, replacement parts, or fun things for craft shows. This website is mainly a place for folks we meet at local events to reconnect, place custom orders, or grab something we might've sold out of at the show.</p>
-                    <p>Thanks for stopping by—feel free to reach out if you have an idea you want to bring to life!</p>
+                    <p>Welcome to GR3D Prints! I'm just a Mom working out of my garage with a couple of Bambu Lab X1C printers. I serve the greater Grand Rapids area, and the shop is in Wayland.</p>
+                    <p>I got my first printer in 2010 and love exploring the ever-evolving capabilities of these amazing machines.</p>
+                    <p>Check out our <a href="store.html">shop</a> for available prints, or check the <a href="#locations">Find Our Prints</a> page to browse a rotating selection of prints in person.</p>
                     <div class="about-features">
                         <div class="feature">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Local to Grand Rapids</span>
+                            <span>Based in Wayland</span>
                         </div>
                         <div class="feature">
                             <i class="fas fa-clock"></i>
-                            <span>Fast Turnaround</span>
+                            <span>Printing since 2010</span>
                         </div>
                         <div class="feature">
                             <i class="fas fa-shield-alt"></i>
@@ -186,7 +183,7 @@
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
                             <h4>Location</h4>
-                            <p>Greater Grand Rapids, Michigan Area</p>
+                            <p>Wayland, Michigan — serving the greater Grand Rapids area</p>
                         </div>
                     </div>
                     <div class="contact-item">
@@ -198,8 +195,10 @@
                     </div>
                 </div>
                 <div class="contact-form">
-                    <h3>Request a Quote</h3>
+                    <h3>Reach Out</h3>
+                    <p class="form-intro">Have a question about something from a show, an order, or anything else? Send a note and we'll get back to you.</p>
                     <form action="https://formspree.io/f/xdkzlwpl" method="POST">
+                        <input type="hidden" name="_subject" value="New message from the GR3D Prints website">
                         <div class="form-group">
                             <input type="text" name="name" placeholder="Your Name" required>
                         </div>
@@ -210,9 +209,9 @@
                             <input type="tel" name="phone" placeholder="Your Phone">
                         </div>
                         <div class="form-group">
-                            <textarea name="message" placeholder="Describe your project or requirements" rows="5" required></textarea>
+                            <textarea name="message" placeholder="Your question or message" rows="5" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Send Request</button>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
                     </form>
                 </div>
             </div>
@@ -225,15 +224,16 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>GR3D Prints</h3>
-                    <p>3D printing services for the Grand Rapids, Michigan and surrounding areas.</p>
+                    <p>3D prints from Wayland, serving the greater Grand Rapids area.</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Services</h4>
+                    <h4>Explore</h4>
                     <ul>
-                        <li><a href="#services">Print Something You Saw</a></li>
-                        <li><a href="#services">Create Something You Need</a></li>
-                        <li><a href="#services">Fix Something You Broke</a></li>
-                        <li><a href="#services">Not Sure What You Want?</a></li>
+                        <li><a href="store.html">Store</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#portfolio">Our Work</a></li>
+                        <li><a href="#locations">Find Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -247,6 +247,7 @@
         </div>
     </footer>
 
+    <script src="products.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 

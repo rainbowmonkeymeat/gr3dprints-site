@@ -39,10 +39,18 @@ body {
     align-items: center;
 }
 
+a.nav-logo {
+    text-decoration: none;
+}
+
 .nav-logo h2 {
     color: #4c1d95;
     font-weight: 700;
     font-size: 1.5rem;
+}
+
+.nav-link.active {
+    color: #2563eb;
 }
 
 .nav-menu {
@@ -194,6 +202,26 @@ body {
     color: #2563eb;
 }
 
+.btn-solid {
+    background: #2563eb;
+    color: white;
+    border: 2px solid #2563eb;
+}
+
+.btn-solid:hover {
+    background: #1d4ed8;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-solid.is-disabled {
+    background: #e5e7eb;
+    color: #6b7280;
+    border-color: #e5e7eb;
+    cursor: default;
+    transform: none;
+}
+
 .hero-image {
     display: flex;
     justify-content: center;
@@ -229,82 +257,6 @@ body {
     color: #1f2937;
 }
 
-/* Services Section */
-.services {
-    padding: 80px 0;
-    background: #f8fafc;
-}
-
-.services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.service-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center;
-    overflow: hidden;
-}
-
-.service-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-.service-image {
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-}
-
-.service-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.service-card:hover .service-img {
-    transform: scale(1.05);
-}
-
-.service-icon {
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #2563eb, #3b82f6);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: -40px auto 1.5rem;
-    position: relative;
-    z-index: 2;
-    border: 4px solid white;
-}
-
-.service-icon i {
-    font-size: 2rem;
-    color: white;
-}
-
-.service-card h3 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #1f2937;
-    padding: 0 1.5rem;
-}
-
-.service-card p {
-    color: #6b7280;
-    line-height: 1.6;
-    padding: 0 1.5rem 1.5rem;
-}
-
 /* About Section */
 .about {
     padding: 80px 0;
@@ -330,6 +282,15 @@ body {
     color: #6b7280;
     margin-bottom: 1.5rem;
     line-height: 1.7;
+}
+
+.about-text a {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.about-text a:hover {
+    color: #1d4ed8;
 }
 
 .about-features {
@@ -435,6 +396,215 @@ body {
     opacity: 0.9;
 }
 
+/* Store */
+.store-section {
+    padding: 80px 0;
+    background: #f8fafc;
+}
+
+.section-lead {
+    text-align: center;
+    max-width: 640px;
+    margin: -1.5rem auto 2.5rem;
+    color: #6b7280;
+    font-size: 1.05rem;
+}
+
+/* Local shops. One card is a featured stop; two or more become a directory. */
+.locations {
+    padding: 80px 0;
+    background: linear-gradient(180deg, #f5f3ff 0%, #eef2ff 100%);
+}
+
+.location-list {
+    list-style: none;
+    display: grid;
+    gap: 1.25rem;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.location-card {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1.5rem 1.75rem;
+    align-items: center;
+    background: #fff;
+    border: 1px solid rgba(76, 29, 149, 0.08);
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
+    box-shadow: 0 10px 30px rgba(76, 29, 149, 0.08);
+}
+
+.location-body h3 {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.45rem;
+}
+
+.location-address {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+.location-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.location-site {
+    color: #4c1d95;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.location-site:hover {
+    color: #2563eb;
+}
+
+.location-list:has(> :nth-child(2)) {
+    max-width: 1040px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.location-list:has(> :nth-child(3)) {
+    max-width: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.location-list:has(> :nth-child(2)) .location-card {
+    grid-template-columns: 1fr;
+    align-items: start;
+    height: 100%;
+}
+
+.page-header {
+    padding: 140px 0 24px;
+    background: #f8fafc;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: 2.75rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.75rem;
+}
+
+.page-header p {
+    max-width: 640px;
+    margin: 0 auto;
+    color: #6b7280;
+    font-size: 1.05rem;
+}
+
+.store-page {
+    padding: 24px 0 80px;
+    background: #f8fafc;
+}
+
+.store-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.store-more {
+    text-align: center;
+    margin-top: 2.5rem;
+}
+
+.store-empty {
+    text-align: center;
+    color: #6b7280;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 280px;
+    max-width: 360px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+    background: #e5e7eb;
+}
+
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.05);
+}
+
+.product-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #1f2937;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+}
+
+.product-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.product-body h3 {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.product-price {
+    color: #4c1d95;
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.product-description {
+    color: #6b7280;
+    line-height: 1.6;
+    flex: 1;
+}
+
+.product-card .btn {
+    align-self: flex-start;
+}
+
+.product-card.is-sold-out {
+    opacity: 0.88;
+}
+
 /* Contact Section */
 .contact {
     padding: 80px 0;
@@ -480,8 +650,14 @@ body {
 .contact-form h3 {
     font-size: 1.8rem;
     font-weight: 600;
-    margin-bottom: 2rem;
+    margin-bottom: 0.75rem;
     color: #1f2937;
+}
+
+.form-intro {
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
 }
 
 .form-group {
@@ -616,10 +792,6 @@ body {
         gap: 2rem;
     }
 
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-
     .portfolio-grid {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
@@ -632,11 +804,26 @@ body {
         padding: 100px 0 60px;
     }
 
-    .services,
     .about,
     .portfolio,
-    .contact {
+    .contact,
+    .store-section,
+    .locations {
         padding: 60px 0;
+    }
+
+    .location-card,
+    .location-list:has(> :nth-child(2)) .location-card {
+        grid-template-columns: 1fr;
+    }
+
+    .location-list:has(> :nth-child(2)),
+    .location-list:has(> :nth-child(3)) {
+        grid-template-columns: 1fr;
+    }
+
+    .page-header h1 {
+        font-size: 2.1rem;
     }
 }
 
@@ -669,6 +856,11 @@ body {
 /* Smooth Scrolling */
 html {
     scroll-behavior: smooth;
+}
+
+section,
+.page-header {
+    scroll-margin-top: 88px;
 }
 
 /* Animation Classes */
