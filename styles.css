@@ -440,7 +440,7 @@ a.nav-logo {
     font-size: 1.45rem;
     font-weight: 700;
     color: #1f2937;
-    margin-bottom: 0.45rem;
+    margin-bottom: 0.2rem;
 }
 
 .location-address {
@@ -456,6 +456,8 @@ a.nav-logo {
 }
 
 .location-site {
+    display: inline-block;
+    margin-bottom: 0.55rem;
     color: #4c1d95;
     font-weight: 600;
     text-decoration: none;
