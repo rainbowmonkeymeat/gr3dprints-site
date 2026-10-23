@@ -1,6 +1,8 @@
 # Stripe Checkout setup
 
-Hosted Stripe Checkout is wired up. The shop stays on Cloudflare Pages. The new endpoint is a Pages Function, which runs on Cloudflare’s worker runtime next to the existing site. A separate Workers project is not required.
+The shop is moving to Square. The website only links to that store. Do not continue this Checkout setup unless a Stripe shop is explicitly requested again.
+
+Hosted Stripe Checkout was wired up. The shop stays on Cloudflare Pages. The new endpoint is a Pages Function, which runs on Cloudflare’s worker runtime next to the existing site. A separate Workers project is not required.
 
 The Checkout button in the cart posts to that function. The function creates a Checkout Session and redirects the customer to Stripe’s full-page payment page.
 

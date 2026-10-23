@@ -1,3 +1,20 @@
+// Paste the Square Online shop link here. Every Shop menu item and button uses it.
+const SQUARE_SHOP_URL = "https://gr3dprints.square.site";
+
+function applyShopLinks() {
+    if (!SQUARE_SHOP_URL) {
+        return;
+    }
+    document.querySelectorAll("a.shop-link").forEach(link => {
+        link.href = SQUARE_SHOP_URL;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+    });
+    if (/(^|\/)shop\.html$/.test(location.pathname)) {
+        location.replace(SQUARE_SHOP_URL);
+    }
+}
+
 // Mobile Navigation Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
@@ -536,9 +553,8 @@ function clearCartAfterPayment() {
 }
 
 function startShop() {
-    clearCartAfterPayment();
+    applyShopLinks();
     renderShop();
-    mountCart();
 }
 
 if (document.readyState === 'loading') {

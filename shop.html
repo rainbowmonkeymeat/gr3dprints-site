@@ -20,7 +20,7 @@
                     <a href="index.html" class="nav-link">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="shop.html" class="nav-link active">Shop</a>
+                    <a href="shop.html" class="nav-link shop-link active">Shop</a>
                 </li>
                 <li class="nav-item">
                     <a href="index.html#about" class="nav-link">About</a>
@@ -36,10 +36,6 @@
                 </li>
             </ul>
             <div class="nav-tools">
-                <button type="button" class="cart-toggle" aria-label="Open cart">
-                    <i class="fas fa-shopping-bag" aria-hidden="true"></i>
-                    <span class="cart-count is-empty">0</span>
-                </button>
                 <div class="hamburger">
                     <span class="bar"></span>
                     <span class="bar"></span>
@@ -52,59 +48,9 @@
     <header class="page-header">
         <div class="container">
             <h1>Shop</h1>
-            <p>Finished prints from our shows.</p>
+            <p>Finished prints are sold in the online shop.</p>
         </div>
     </header>
-
-    <main class="store-page">
-        <div class="container">
-            <div id="product-detail" class="product-detail" hidden></div>
-            <div id="shop-catalog" class="store-grid">
-                <article class="product-card">
-                    <a class="product-link" href="shop.html#sea-turtle">
-                        <div class="product-image">
-                            <img src="photos/IMG_0400-EDIT.jpg" alt="Articulated Sea Turtle" class="product-img">
-                        </div>
-                        <div class="product-body">
-                            <h3>Articulated Sea Turtle</h3>
-                            <p class="product-description">A small poseable turtle with a two-color shell. Printed to order, so you can pick the colors.</p>
-                        </div>
-                    </a>
-                    <div class="product-actions">
-                        <button type="button" class="btn btn-solid add-to-cart" data-product-id="sea-turtle">Add to cart</button>
-                    </div>
-                </article>
-                <article class="product-card">
-                    <a class="product-link" href="shop.html#flower-dragon">
-                        <div class="product-image">
-                            <img src="photos/IMG_6631-EDIT.jpg" alt="Flower Dragon" class="product-img">
-                        </div>
-                        <div class="product-body">
-                            <h3>Flower Dragon</h3>
-                            <p class="product-description">A poseable dragon with printed flowers along the back. A show favorite when we have them on the table.</p>
-                        </div>
-                    </a>
-                    <div class="product-actions">
-                        <button type="button" class="btn btn-solid add-to-cart" data-product-id="flower-dragon">Add to cart</button>
-                    </div>
-                </article>
-                <article class="product-card">
-                    <a class="product-link" href="shop.html#articulated-unicorn">
-                        <div class="product-image">
-                            <img src="photos/IMG_1077.JPG" alt="Articulated Unicorn" class="product-img">
-                        </div>
-                        <div class="product-body">
-                            <h3>Articulated Unicorn</h3>
-                            <p class="product-description">A tiny poseable unicorn, printed in the colors you want. Nice as a gift or a desk companion.</p>
-                        </div>
-                    </a>
-                    <div class="product-actions">
-                        <button type="button" class="btn btn-solid add-to-cart" data-product-id="articulated-unicorn">Add to cart</button>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </main>
 
     <footer class="footer">
         <div class="container">
@@ -116,7 +62,7 @@
                 <div class="footer-section">
                     <h4>Explore</h4>
                     <ul>
-                        <li><a href="shop.html">Shop</a></li>
+                        <li><a href="shop.html" class="shop-link">Shop</a></li>
                         <li><a href="index.html#about">About</a></li>
                         <li><a href="index.html#portfolio">Our Work</a></li>
                         <li><a href="index.html#locations">Find Us</a></li>
@@ -136,6 +82,6 @@
     </footer>
 
     <script src="products.js?v=5"></script>
-    <script src="script.js?v=5"></script>
+    <script src="script.js?v=7"></script>
 </body>
 </html>
