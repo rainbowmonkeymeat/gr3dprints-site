@@ -1,0 +1,18 @@
+# Cloudflare Pages custom response headers.
+# Docs: https://developers.cloudflare.com/pages/configuration/headers/
+# Lives in the build output directory (wrangler.toml: pages_build_output_dir = "./").
+
+# Cloudflare Pages' default for non-HTML assets is
+# `Cache-Control: public, max-age=14400, must-revalidate`, which lets browsers
+# reuse styles.css / script.js / products.js / photos for up to 4 hours without
+# even revalidating. That is why visitors had to hard-refresh after a deploy:
+# the HTML updated but the CSS/JS/images behind it did not.
+#
+# Force revalidation on every load instead. Unchanged assets come back as 304
+# (empty body), so this is cheap; changed assets are picked up immediately.
+# The ?v= query strings in the HTML are harmless redundancy on top of this.
+#
+# Note: _headers does not apply to Pages Functions responses (see docs), so the
+# Stripe checkout function is unaffected.
+/*
+  Cache-Control: public, max-age=0, must-revalidate
