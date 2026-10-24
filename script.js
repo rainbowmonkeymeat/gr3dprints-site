@@ -187,7 +187,7 @@ scrollToTopBtn.style.cssText = `
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #2563eb;
+    background: #9067C7;
     color: white;
     border: none;
     cursor: pointer;
@@ -222,7 +222,7 @@ scrollToTopBtn.addEventListener('click', () => {
 // Add hover effect to scroll-to-top button
 scrollToTopBtn.addEventListener('mouseenter', () => {
     scrollToTopBtn.style.transform = 'translateY(-3px)';
-    scrollToTopBtn.style.boxShadow = '0 5px 15px rgba(37, 99, 235, 0.3)';
+    scrollToTopBtn.style.boxShadow = '0 5px 15px rgba(144, 103, 199, 0.45)';
 });
 
 scrollToTopBtn.addEventListener('mouseleave', () => {
